@@ -185,11 +185,7 @@ class Spel:
                 return rad
     
     def los_bradet(self, rad):
-        
-        sist_kontrollerad_kolonn = []
-
-        for x in range(len(self.bradet)):
-            sist_kontrollerad_kolonn.append(-1)
+        sist_kontrollerad_kolonn = [-1] * len(self.bradet)
 
         while rad < len(self.bradet):  # looper på rader
             kolonn = sist_kontrollerad_kolonn[rad] + 1
@@ -198,21 +194,21 @@ class Spel:
             while kolonn < len(self.bradet):  # looper på kolonner
                 sist_kontrollerad_kolonn[rad] = kolonn
 
-            if self.validera_troll_position(rad, kolonn) == True:
-                accepterad_position = True
-                self.bradet[rad][kolonn].har_troll = True
-                self.bradet[rad][kolonn].visa_troll()
-                break
-            else:
-                accepterad_position = False
-                kolonn += 1
+                if self.validera_troll_position(rad, kolonn):
+                    accepterad_position = True
+                    self.bradet[rad][kolonn].har_troll = True
+                    self.bradet[rad][kolonn].visa_troll()
+                    break
+                else:
+                    accepterad_position = False
+                    kolonn += 1
 
-        if accepterad_position == True:
-            rad += 1
-        else:
-            sist_kontrollerad_kolonn[rad] = -1
-            rad -= 1
-            self.tabort_alla_troll_fran_raden(rad)
+            if accepterad_position:
+                rad += 1
+            else:
+                sist_kontrollerad_kolonn[rad] = -1
+                rad -= 1
+                self.tabort_alla_troll_fran_raden(rad)
 
 
     def tabort_alla_troll_fran_raden(self, rad):
